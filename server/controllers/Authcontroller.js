@@ -38,10 +38,10 @@ module.exports.Signup = async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({
       email,
-      password: hashedPassword,
+      password,
       username,
       createdAt,
     });
@@ -82,10 +82,10 @@ module.exports.Login = async (req, res, next) => {
     if (!auth) {
       return res.json({message:'Incorrect password or email' }) 
     }
-     const token = createSecretToken(user._id);
+     const token = createSecretToken(user._id);   
      res.cookie("token", token, {
        withCredentials: true,
-       httpOnly: false,
+       httpOnly: true,
      });
      res.status(201).json({ message: "User logged in successfully", success: true });
      next()
